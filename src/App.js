@@ -17,17 +17,15 @@ export default class App extends Component {
       percDiscountINSS: 0,
       percDiscountIRPF: 0,
       netSalary: 0,
-      netSalaryPerc:0
+      netSalaryPerc: 0
     }
   }
-  
+
   calculateINSSDiscount() {
-    let { baseSalary, discountINSS } = this.state;
-    console.log(baseSalary);
+    let { baseSalary } = this.state;
     let percentage = 0;
     let discount = 0;
     baseSalary = parseFloat(baseSalary);
-    console.log(baseSalary);
     if (baseSalary <= 1045.00) {
       percentage = 0.075;
     }
@@ -49,8 +47,6 @@ export default class App extends Component {
         percDiscountINSS: percentage
       });
     }
-
-
     console.log(`The inss discount will be ${this.state.discountINSS}`);
   }
 
@@ -85,15 +81,13 @@ export default class App extends Component {
       discountIRPF,
       percDiscountIRPF: percentage,
     });
-
     console.log(`The IRPF base will be ${this.state.baseIRPF} and the IRPF discount will be ${this.state.discountIRPF}`);
   }
 
-  async calculateNetSalary(){
+  async calculateNetSalary() {
     const netSalary = (this.state.baseSalary - this.state.discountINSS) - (this.state.discountIRPF);
-    console.log(netSalary);
-    const netSalaryPerc = (netSalary / this.state.baseSalary) * 100;
-    this.setState({
+    const netSalaryPerc = (netSalary / this.state.baseSalary);
+    await this.setState({
       netSalary,
       netSalaryPerc
     })
@@ -101,7 +95,6 @@ export default class App extends Component {
 
 
   handleInputChange = async (salary) => {
-    console.log(salary);
     await this.setState({
       baseSalary: parseFloat(salary),
     });
@@ -112,29 +105,26 @@ export default class App extends Component {
 
 
   render() {
-    const {perc} = this.state.percDiscountINSS ;
     return (
       <div className="App">
         <BaseSalaryInput onChange={this.handleInputChange} />
         <div className="row">
           <div className="row">
             <ReadOnlyInput val={this.state.baseSalary} title='Base INSS:' />
-            <ReadOnlyInputDiscount val={this.state.discountINSS} percentage={this.state.percDiscountINSS} title='Desconto INSS:' id='discINSS'/>
+            <ReadOnlyInputDiscount val={this.state.discountINSS} percentage={this.state.percDiscountINSS} title='Desconto INSS:' id='discINSS' />
             <ReadOnlyInput val={this.state.baseIRPF} title='Base IRPF:' />
-            <ReadOnlyInputDiscount val={this.state.discountIRPF} percentage={this.state.percDiscountIRPF} title='Desconto IRPF:' id='discIRPF'/>
-          </div>
-          <div> 
-          <ReadOnlyInputDiscount val={this.state.netSalary} percentage={this.state.netSalaryPerc} title='Salário líquido:'/>
+            <ReadOnlyInputDiscount val={this.state.discountIRPF} percentage={this.state.percDiscountIRPF} title='Desconto IRPF:' id='discIRPF' />
           </div>
           <div>
-            <ProgressBar discINSS = {this.state.percDiscountINSS * 100} discIRPF = {this.state.percDiscountIRPF * 100} netSalary = {this.state.netSalaryPerc }/>
+            <ReadOnlyInputDiscount val={this.state.netSalary} percentage={this.state.netSalaryPerc} title='Salário líquido:' />
+          </div>
+          <div>
+            <ProgressBar discINSS={this.state.percDiscountINSS * 100} discIRPF={this.state.percDiscountIRPF * 100} netSalary={this.state.netSalaryPerc * 100} />
           </div>
         </div>
-
       </div>
     );
   }
-
 }
 
 
