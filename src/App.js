@@ -3,6 +3,9 @@ import './App.css';
 import BaseSalaryInput from './components/BaseSalaryInput';
 import ReadOnlyInput from './components/ReadOnlyInput';
 import ReadOnlyInputDiscount from './components/ReadOnlyInputDiscount';
+import ProgressBar from './components/ProgressBar';
+
+
 export default class App extends Component {
   constructor() {
     super();
@@ -17,20 +20,7 @@ export default class App extends Component {
       netSalaryPerc:0
     }
   }
-
-  // componentDidMount() {
-  //   this.setState({
-  //     baseSalary: 0,
-  //     discountINSS: 0,
-  //     baseIRPF: 0,
-  //     discountIRPF: 0,
-  //   });
-  // }
-
-  componentDidUpdate() {
-
-  }
-
+  
   calculateINSSDiscount() {
     let { baseSalary, discountINSS } = this.state;
     console.log(baseSalary);
@@ -99,6 +89,16 @@ export default class App extends Component {
     console.log(`The IRPF base will be ${this.state.baseIRPF} and the IRPF discount will be ${this.state.discountIRPF}`);
   }
 
+  async calculateNetSalary(){
+    const netSalary = (this.state.baseSalary - this.state.discountINSS) - (this.state.discountIRPF);
+    console.log(netSalary);
+    const netSalaryPerc = (netSalary / this.state.baseSalary) * 100;
+    this.setState({
+      netSalary,
+      netSalaryPerc
+    })
+  }
+
 
   handleInputChange = async (salary) => {
     console.log(salary);
@@ -107,11 +107,12 @@ export default class App extends Component {
     });
     this.calculateINSSDiscount();
     this.calculateIRPFDiscount();
+    this.calculateNetSalary();
   };
 
 
   render() {
-    const { baseSalary } = this.state;
+    const {perc} = this.state.percDiscountINSS ;
     return (
       <div className="App">
         <BaseSalaryInput onChange={this.handleInputChange} />
@@ -124,6 +125,9 @@ export default class App extends Component {
           </div>
           <div> 
           <ReadOnlyInputDiscount val={this.state.netSalary} percentage={this.state.netSalaryPerc} title='Salário líquido:'/>
+          </div>
+          <div>
+            <ProgressBar discINSS = {this.state.percDiscountINSS * 100} discIRPF = {this.state.percDiscountIRPF * 100} netSalary = {this.state.netSalaryPerc }/>
           </div>
         </div>
 

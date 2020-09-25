@@ -1,0 +1,25 @@
+.container{
+    width: 100%;
+    height: 30px;
+    display: flex;
+    flex-direction: row;
+    border: solid 1px;
+}
+
+.discINSS{
+    background-color: #ef6c00;
+    
+    height: 100%;
+}
+
+.discIRPF{
+    background-color: #c62828;
+    
+    height: 100%;
+}
+
+.netSalary{
+    background-color: #009688;
+   
+    height: 100%;
+}

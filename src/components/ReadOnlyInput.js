@@ -3,12 +3,6 @@ import css from './readOnlyInput.module.css';
 
 
 export default class ReadOnlyInput extends Component {
-    componentDidMount(){
-        console.log(this.props);
-    }
-    componentDidUpdate(){
-        console.log('Read only updated');
-    }
     render() { 
         const {val, title, id} = this.props;
         const formatedVal = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val);
